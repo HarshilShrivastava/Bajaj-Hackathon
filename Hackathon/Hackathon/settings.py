@@ -25,7 +25,7 @@ SECRET_KEY = '-r-(scmrc&s9hm%%z-@t%#+t)=n3n97y1q*66o0qx4kfwdhlfz'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
