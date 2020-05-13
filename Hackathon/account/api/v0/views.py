@@ -110,5 +110,4 @@ def ObtainAuthTokenView(request):
                 context['status']: 440
                 context['response'] = 'Error'
                 context['error_message'] = 'Invalid credentials'
-            
         return Response(context)
