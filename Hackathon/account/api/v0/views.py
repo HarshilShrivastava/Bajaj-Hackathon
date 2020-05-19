@@ -38,20 +38,22 @@ def registration_view(request):
     if request.method == 'POST':
         data = {}
         context={}
+        email={}
 
         email = request.data.get('email')
         if validate_email(email) != None:
             context['sucess'] = False
             context['response'] = status.HTTP_403_FORBIDDEN
-            context['error_message'] = 'That email is already in use.'
-            context['data']=data
+            data['email']='That email is already in use.'
+            context['error_message'] = data
+            
             return Response(context)
 
         serializer = RegistrationSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
             context['sucess'] = True
-            context['message'] = 'Sucessfully registered'
+            context['error_message'] = 'Sucessfully registered'
             context['response'] = status.HTTP_201_CREATED
             data['email'] = user.email
             data['username'] = user.username
@@ -65,7 +67,7 @@ def registration_view(request):
             context['message'] = 'not registered registered'
             context['response'] = status.HTTP_401_UNAUTHORIZED
             data = serializer.errors
-            context['data']=data
+            context['error_message']=data
     return Response(context)
 
 @api_view(('GET',))

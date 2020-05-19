@@ -24,6 +24,7 @@ from django.contrib.auth import authenticate
 from rest_framework.permissions import AllowAny
 from info.api.v0.serializers import(
 ProfileSerializer,
+ProfileReadSerializer
 )
 
 class profile(APIView):
@@ -34,12 +35,17 @@ class profile(APIView):
         data={}
         serializer = ProfileSerializer(data=request.data)
         if serializer.is_valid():
+            Gender=serializer.validated_data['Gender']
             Height=serializer.validated_data['Height']
             Weight=serializer.validated_data['Weight']
+            Activity=serializer.validated_data['Activity']
+            Goals=serializer.validated_data['Goals']
             Height=Height/100
             Height=Height*Height
             BMI=Weight/Height
             x=1
+            Age=serializer.validated_data['Age']
+            a=serializer.validated_data['Height']
             if BMI <18.5:
                 x=1
             elif BMI > 18.5 and BMI <25.0:
@@ -48,7 +54,32 @@ class profile(APIView):
                 x=3
             elif BMI >30.0:
                 x=4
-            serializer.save(User=self.request.user,BMI=BMI,Condition=x)
+            BMR=1
+            if Gender == '1' :
+                BMR= (10*Weight)+(6.25*a)-(5*Age)+5       
+            elif Gender == '2':
+                print(BMR)
+                BMR=   (10*Weight)+(6.25*a)-(5*Age)-161
+            DailyCal=BMR
+            if Activity=='1':
+                DailyCal=BMR*1.2
+            elif Activity =='2':
+                DailyCal=BMR*1.4
+            elif Activity =='3':
+                DailyCal =BMR*1.6
+            elif Activity =='4':
+                DailyCal =BMR*1.75
+            if Goals=='1':
+                DailyCal=DailyCal- 1000
+            elif Goals =='2':
+                DailyCal=DailyCal- 500
+            elif Goals =='3':
+                DailyCal =DailyCal
+            elif Goals =='4':
+                DailyCal =DailyCal+ 500
+            elif Goals =='5':
+                DailyCal =DailyCal+ 1000
+            serializer.save(User=self.request.user,BMI=BMI,Condition=x,BMR=BMR,DailyCalories=DailyCal)
             context['sucess']=True
             context['status']=200
             data=serializer.data
@@ -73,29 +104,68 @@ class profile(APIView):
             context['status']=400
             context['data']=data
             return Response(context)
-        serializer = ProfileSerializer(obj)
+        serializer = ProfileReadSerializer(obj)
         context['sucess']=True
         context['status']=200
         data=serializer.data
-        data['BMI']=obj.BMI
-        data['Condition']=obj.Condition
         context['data']=data
         return Response(context)
 
-            
     def put(self, request, *args, **kwargs):
         obj=get_object_or_404(Profile,User=request.user)
         serializer = ProfileSerializer(obj,data=request.data)
         context={}
         data={}
         if serializer.is_valid():
-            serializer.save()
+            Gender=serializer.validated_data['Gender']
+            Height=serializer.validated_data['Height']
+            Weight=serializer.validated_data['Weight']
+            Activity=serializer.validated_data['Activity']
+            Goals=serializer.validated_data['Goals']
+            Height=Height/100
+            Height=Height*Height
+            BMI=Weight/Height
+            x=1
+            Age=serializer.validated_data['Age']
+            a=serializer.validated_data['Height']
+            if BMI <18.5:
+                x=1
+            elif BMI > 18.5 and BMI <25.0:
+                x=2
+            elif BMI>25.0 and BMI<30.0:
+                x=3
+            elif BMI >30.0:
+                x=4
+            BMR=1
+            if Gender == '1' :
+                BMR= (10*Weight)+(6.25*a)-(5*Age)+5
+            elif Gender == '2':
+                BMR=   (10*Weight)+(6.25*a)-(5*Age)-161
+            DailyCal=BMR
+            if Activity=='1':
+                DailyCal=BMR*1.2
+            elif Activity =='2':
+                DailyCal=BMR*1.4
+            elif Activity =='3':
+                DailyCal =BMR*1.6
+            elif Activity =='4':
+                DailyCal =BMR*1.75
+            if Goals=='1':
+                DailyCal=DailyCal- 1000
+            elif Goals =='2':
+                DailyCal=DailyCal- 500
+            elif Goals =='3':
+                DailyCal =DailyCal
+            elif Goals =='4':
+                DailyCal =DailyCal+ 500
+            elif Goals =='5':
+                DailyCal =DailyCal+ 1000
+            serializer.save(User=self.request.user,BMI=BMI,Condition=x,BMR=BMR,DailyCalories=DailyCal)
             context['sucess']=True
             context['status']=200
-
             data=serializer.data
-            data['BMI']=obj.BMI
-            data['Condition']=obj.Condition
+            data['BMI']=BMI
+            data['Condition']=x
             context['data']=data
             return Response(context)
         context['sucess']=False
