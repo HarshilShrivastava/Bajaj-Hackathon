@@ -44,11 +44,9 @@ def registration_view(request):
         if validate_email(email) != None:
             context['sucess'] = False
             context['response'] = status.HTTP_403_FORBIDDEN
-            data['email']='That email is already in use.'
-            context['error_message'] = data
-            
+            context['error_message'] = 'That email is already in use.'
+            context['data']=data
             return Response(context)
-
         serializer = RegistrationSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
@@ -107,6 +105,7 @@ def ObtainAuthTokenView(request):
                 context['status']=200
                 context['token'] = token.key
                 context['Is_User']=account.Is_User
+                context['username']=request.user.username
                 
             else:
                 context['status']: 440
