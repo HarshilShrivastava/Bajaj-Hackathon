@@ -13,3 +13,6 @@ class Food(models.Model):
     Fiber =models.DecimalField(decimal_places=2, null=True, blank=True,max_digits=10)
     Cholesterol =models.DecimalField(decimal_places=2, null=True, blank=True,max_digits=10)
     Saturated_Fats =models.DecimalField(decimal_places=2, null=True, blank=True,max_digits=10)
+    Image=models.ImageField(upload_to='Food/',null=True,blank=True)
+    def __str__(self):
+        return self.name

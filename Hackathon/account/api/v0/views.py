@@ -92,6 +92,7 @@ def ObtainAuthTokenView(request):
     if request.method=='POST':
         serializer=LoginSerializer(data=request.data)
         context={}
+        data={}
         if serializer.is_valid(raise_exception=True):
             #serializer.save()
             usernam=serializer.validated_data['username']
@@ -102,12 +103,17 @@ def ObtainAuthTokenView(request):
                     token = Token.objects.get(user=account)
                 except Token.DoesNotExist:
                     token = Token.objects.create(user=account)
-                context['status']=200
-                context['token'] = token.key
-                context['Is_User']=account.Is_User
-                context['username']=request.user.username
+                context['response']=200
+                context['sucess']=True
+                context['message']="sucessfull login"
+                data['token'] = token.key
                 
+                data['username']=account.username
+                data['email']=account.email
+                data['id']=account.id
+                context['data']=data
             else:
+                context['sucess']=False
                 context['status']: 440
                 context['response'] = 'Error'
                 context['error_message'] = 'Invalid credentials'
