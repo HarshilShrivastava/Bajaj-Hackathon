@@ -104,8 +104,8 @@ def ObtainAuthTokenView(request):
                 except Token.DoesNotExist:
                     token = Token.objects.create(user=account)
                 context['response']=200
-                context['sucess']=True
-                context['message']="sucessfull login"
+                context['success']=True
+                context['error_message']="sucessfull login"
                 data['token'] = token.key
                 
                 data['username']=account.username
@@ -113,7 +113,7 @@ def ObtainAuthTokenView(request):
                 data['id']=account.id
                 context['data']=data
             else:
-                context['sucess']=False
+                context['success']=False
                 context['status']: 440
                 context['response'] = 'Error'
                 context['error_message'] = 'Invalid credentials'
