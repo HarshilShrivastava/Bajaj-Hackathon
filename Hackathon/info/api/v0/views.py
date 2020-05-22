@@ -28,8 +28,8 @@ ProfileReadSerializer
 )
 
 class profile(APIView):
-    permission_classes = [IsAuthenticated]
-    authentication_classes = (TokenAuthentication,)
+    permission_classes = [AllowAny]
+    #authentication_classes = (TokenAuthentication,)
     def post(self, request, *args, **kwargs):
         context={}
         data={}
@@ -79,7 +79,8 @@ class profile(APIView):
                 DailyCal =DailyCal+ 500
             elif Goals =='5':
                 DailyCal =DailyCal+ 1000
-            serializer.save(User=self.request.user,BMI=BMI,Condition=x,BMR=BMR,DailyCalories=DailyCal)
+            user=get_object_or_404(User,id=3)
+            serializer.save(User=user,BMI=BMI,Condition=x,BMR=BMR,DailyCalories=DailyCal)
             context['sucess']=True
             context['status']=200
             data=serializer.data
@@ -98,7 +99,8 @@ class profile(APIView):
         context={}
         data={}
         try:
-            obj=get_object_or_404(Profile,User=request.user)
+            us=get_object_or_404(User,id=3)
+            obj=get_object_or_404(Profile,User=us)
         except:
             context['sucess']=False
             context['status']=400
@@ -112,7 +114,8 @@ class profile(APIView):
         return Response(context)
 
     def put(self, request, *args, **kwargs):
-        obj=get_object_or_404(Profile,User=request.user)
+        us=get_object_or_404(User,id=3)
+        obj=get_object_or_404(Profile,User=us)
         serializer = ProfileSerializer(obj,data=request.data)
         context={}
         data={}
@@ -160,7 +163,7 @@ class profile(APIView):
                 DailyCal =DailyCal+ 500
             elif Goals =='5':
                 DailyCal =DailyCal+ 1000
-            serializer.save(User=self.request.user,BMI=BMI,Condition=x,BMR=BMR,DailyCalories=DailyCal)
+            serializer.save(User=us,BMI=BMI,Condition=x,BMR=BMR,DailyCalories=DailyCal)
             context['sucess']=True
             context['status']=200
             data=serializer.data

@@ -8,5 +8,8 @@ from import_export.admin import ImportExportModelAdmin
 
 @admin.register(Food)
 class PersonAdmin(ImportExportModelAdmin):
+    list_filter = ('Food_Group',)
+    search_fields = ('name', )
+
     pass
 # Register your models here.

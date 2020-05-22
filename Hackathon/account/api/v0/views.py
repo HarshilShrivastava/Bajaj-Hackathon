@@ -107,7 +107,6 @@ def ObtainAuthTokenView(request):
                 context['success']=True
                 context['error_message']="sucessfull login"
                 data['token'] = token.key
-                
                 data['username']=account.username
                 data['email']=account.email
                 data['id']=account.id
