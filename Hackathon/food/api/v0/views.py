@@ -46,20 +46,12 @@ class AllFoodViews(generics.ListCreateAPIView):
 
 @api_view(['GET',])
 @permission_classes((AllowAny,))
-def fake(request):
+def get_food(request):
     context={}
     data={}
-    
-
-
-
-
-
-
     context['sucess']=True
     context['status']=200
     context['response']="sucessfull"
-    
     qs=Food.objects.filter(name="Bread Chapati Or Roti Whole Wheat Commercially Prepared Frozen")
     qs=qs| Food.objects.filter(name="poha")
     qs=qs| Food.objects.filter(name="Apples")
