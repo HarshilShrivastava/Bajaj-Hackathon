@@ -62,6 +62,6 @@ def get_food(request):
     serializer_class = FoodSerializer(qs,many=True)
     data=serializer_class.data
     context['data']=data
-    return Response(context)
+    return Response(data)
 
         
