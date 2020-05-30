@@ -28,19 +28,17 @@ class AllFoodViews(generics.ListCreateAPIView):
     queryset=Food.objects.all()
     serializer_class = FoodSerializer
     search_fields = ['name']
+    http_method_names = ['get']
+
     filter_backends = (filters.SearchFilter,)
     def list(self,request,*args,**kwargs):
         self.object_list=self.filter_queryset(self.get_queryset())
         serializer=self.get_serializer(self.object_list,many=True)
         context={}
         data={}
-        context['sucess']=True
-        context['status']=200
-        context['response']="sucessfull"
-        context['count']=self.object_list.count()
-        data=serializer.data
-        context['data']=data
-        return Response(context)
+        obj=serializer.data[0]
+        data=obj
+        return Response(data)
 
 
 
@@ -55,13 +53,20 @@ def get_food(request):
     qs=Food.objects.filter(name="Bread Chapati Or Roti Whole Wheat Commercially Prepared Frozen")
     qs=qs| Food.objects.filter(name="poha")
     qs=qs| Food.objects.filter(name="Apples")
-    qs=qs| Food.objects.filter(name="Chicken Feet Boiled")
+    qs=qs| Food.objects.filter(name="Chicken Boiled")
+    qs=qs| Food.objects.filter(name="Sushi Topped With Salmon")
+    qs=qs| Food.objects.filter(name="Brown Rice")
+    qs=qs| Food.objects.filter(name="Pie Tofu With Fruit")
+    qs=qs| Food.objects.filter(name="Hard Boiled Eggs")
+    qs=qs| Food.objects.filter(name="Mushrooms")
+
+
+    #Hard Boiled Eggs
 
     #Chicken Feet Boiled
     context['count']=qs.count()
     serializer_class = FoodSerializer(qs,many=True)
     data=serializer_class.data
     context['data']=data
-    return Response(context)
+    return Response(data)
 
-        
