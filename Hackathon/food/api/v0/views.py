@@ -33,7 +33,7 @@ class AllFoodViews(generics.ListCreateAPIView):
     filter_backends = (filters.SearchFilter,)
     def list(self,request,*args,**kwargs):
         self.object_list=self.filter_queryset(self.get_queryset())
-        serializer=self.get_serializer(self.object_list,many=True)
+        serializer=self.get_serializer(self.object_list,many=True,context={'request': request})
         context={}
         data={}
         obj=serializer.data[0]
@@ -65,7 +65,7 @@ def get_food(request):
 
     #Chicken Feet Boiled
     context['count']=qs.count()
-    serializer_class = FoodSerializer(qs,many=True)
+    serializer_class = FoodSerializer(qs,many=True,context={'request': request})
     data=serializer_class.data
     context['data']=data
     return Response(data)
