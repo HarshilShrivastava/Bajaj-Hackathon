@@ -19,26 +19,40 @@ class Food(models.Model):
 
 class FoodGroup(models.Model):
     name=models.CharField(max_length=255)
+    def __str__(self):
+            return self.name
     
 
 class Category(models.Model):
     name=models.CharField(max_length=255)
+    def __str__(self):
+            return self.name
 
 class AvailablityLevel(models.Model):
     name=models.CharField(max_length=255)
+    def __str__(self):
+            return self.name
 
 class Processing(models.Model):
     Level=models.CharField(max_length=255)
+    def __str__(self):
+            return self.Level
 
 
 class Problem(models.Model):
     name=models.CharField(max_length=255)
+    def __str__(self):
+            return self.name
 
 class AvailablityZone(models.Model):
     name=models.CharField(max_length=255)
+    def __str__(self):
+            return self.name
 
 class Vitamins(models.Model):
     name=models.CharField(max_length=255)
+    def __str__(self):
+            return self.name
 
 class FoodNutrition(models.Model):
     name=models.CharField(max_length=255)
