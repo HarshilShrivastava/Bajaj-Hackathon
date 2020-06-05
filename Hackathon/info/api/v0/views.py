@@ -35,17 +35,17 @@ class profile(APIView):
         data={}
         serializer = ProfileSerializer(data=request.data)
         if serializer.is_valid():
-            Gender=serializer.validated_data['Gender']
-            Height=serializer.validated_data['Height']
-            Weight=serializer.validated_data['Weight']
-            Activity=serializer.validated_data['Activity']
-            Goals=serializer.validated_data['Goals']
+            Gender=serializer.validated_data['gender']
+            Height=serializer.validated_data['height']
+            Weight=serializer.validated_data['weight']
+            Activity=serializer.validated_data['activity']
+            Goals=serializer.validated_data['goals']
             Height=Height/100
             Height=Height*Height
             BMI=Weight/Height
             x=1
-            Age=serializer.validated_data['Age']
-            a=serializer.validated_data['Height']
+            Age=serializer.validated_data['age']
+            a=serializer.validated_data['height']
             if BMI <18.5:
                 x=1
             elif BMI > 18.5 and BMI <25.0:
@@ -80,12 +80,12 @@ class profile(APIView):
             elif Goals =='5':
                 DailyCal =DailyCal+ 1000
             
-            serializer.save(User=request.user  ,BMI=BMI,Condition=x,BMR=BMR,DailyCalories=DailyCal)
+            serializer.save(User=request.user  ,bmi=BMI,condition=x,bmr=BMR,dailyCalories=DailyCal)
             context['sucess']=True
             context['status']=200
             data=serializer.data
-            data['BMI']=BMI
-            data['Condition']=x
+            data['bmi']=BMI
+            data['condition']=x
             context['data']=data
             return Response(context)
         else:
@@ -118,17 +118,17 @@ class profile(APIView):
         context={}
         data={}
         if serializer.is_valid():
-            Gender=serializer.validated_data['Gender']
-            Height=serializer.validated_data['Height']
-            Weight=serializer.validated_data['Weight']
-            Activity=serializer.validated_data['Activity']
-            Goals=serializer.validated_data['Goals']
+            Gender=serializer.validated_data['gender']
+            Height=serializer.validated_data['height']
+            Weight=serializer.validated_data['weight']
+            Activity=serializer.validated_data['activity']
+            Goals=serializer.validated_data['goals']
             Height=Height/100
             Height=Height*Height
             BMI=Weight/Height
             x=1
-            Age=serializer.validated_data['Age']
-            a=serializer.validated_data['Height']
+            Age=serializer.validated_data['age']
+            a=serializer.validated_data['height']
             if BMI <18.5:
                 x=1
             elif BMI > 18.5 and BMI <25.0:

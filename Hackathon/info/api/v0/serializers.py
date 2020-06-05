@@ -5,24 +5,24 @@ class ProfileSerializer(serializers.ModelSerializer):
 
     class Meta():
         model = Profile
-        fields = ['Gender', 'Weight', 'Height', 'Goals', 'Activity','Age']
+        fields = ['gender', 'weight', 'height', 'goals', 'activity','age']
 
 class ProfileReadSerializer(serializers.ModelSerializer):
-    Username=serializers.SerializerMethodField('get_username')
-    Condition=serializers.SerializerMethodField('get_Condition')
-    Gender=serializers.SerializerMethodField('get_Gender')
-    Activity=serializers.SerializerMethodField('get_Activity')
-    Goals=serializers.SerializerMethodField('get_Goals')
+    username=serializers.SerializerMethodField('get_username')
+    condition=serializers.SerializerMethodField('get_Condition')
+    gender=serializers.SerializerMethodField('get_Gender')
+    activity=serializers.SerializerMethodField('get_Activity')
+    goals=serializers.SerializerMethodField('get_Goals')
 
     class Meta():
         model = Profile
-        fields = ['Gender', 'Weight', 'Height', 'Goals', 'Activity','Age','Username','BMI','DailyCalories','BMR','Condition']
+        fields = ['gender', 'weight', 'height', 'goals', 'activity','age','username','bmi','dailyCalories','bmr','condition']
 
     def get_username(self,info):
         data=info.User.username
         return data
     def get_Condition(self,info):
-        data=info.Condition
+        data=info.condition
         if data=='1':
             return "Underweight"
         if data=='2':
@@ -32,7 +32,7 @@ class ProfileReadSerializer(serializers.ModelSerializer):
         if data=='4':
             return "Obesity"
     def get_Gender(self,info):
-        data=info.Gender
+        data=info.gender
         a=''
         if data=='1':
             a= "Male"
@@ -40,7 +40,7 @@ class ProfileReadSerializer(serializers.ModelSerializer):
             a= "Female"
         return a
     def get_Goals(self,info):
-        data=info.Goals
+        data=info.goals
         a=''
         if data=='1':
             a= "Extreme Loose Weight"
@@ -54,7 +54,7 @@ class ProfileReadSerializer(serializers.ModelSerializer):
             a= "Extreme Weight gain"
         return a
     def get_Activity(self,info):
-        data=info.Activity
+        data=info.activity
         if data=='1':
             return "Sedentary"
         if data=='2':
