@@ -29,7 +29,8 @@ from info.api.v0.serializers import(
 ProfileSerializer,
 ProfileReadSerializer,
 DailyDietSserializer,
-MedicalFormSerializer
+MedicalFormSerializer,
+MedicalFormReadSerializer
 )
 
 class profile(APIView):
@@ -187,7 +188,10 @@ class MedicalFormAPI(APIView):
         context={}
         data={}
         serializer = MedicalFormSerializer(data=request.data)
+        
         if serializer.is_valid():
+            #print(serializer.data)
+
             try:
                 obj=get_object_or_404(Profile,User=request.user)
             except:
@@ -195,7 +199,7 @@ class MedicalFormAPI(APIView):
                 context['status']=400
                 context['data']=data
                 return Response(context)
-            serializer.save(Profile=obj)
+            serializer.save(profile=obj)
             context['sucess']=True
             context['status']=200
             context['message']="sucessfull post"
@@ -203,9 +207,11 @@ class MedicalFormAPI(APIView):
             context['data']=data
             return Response(context)
         else:
+            print(serializer.data)
             context['sucess']=False
             context['status']=400
             context['message']="unsucessfull post"
+            print("serializer.data")
             return Response(context)
     
     def get(self,request,*args,**kwargs):
@@ -219,8 +225,8 @@ class MedicalFormAPI(APIView):
             context['data']=data
             context['message']="can't get food items"
             return Response(context)
-        qs=MedicalForm.objects.filter(Profile=obj)
-        serializer=MedicalFormSerializer(qs)
+        qs=MedicalForm.objects.get(profile=obj)
+        serializer=MedicalFormReadSerializer(qs)
         context['sucess']=True
         context['status']=200
         context['message']="sucessfull get"

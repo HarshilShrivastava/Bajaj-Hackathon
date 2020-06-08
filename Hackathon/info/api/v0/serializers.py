@@ -7,7 +7,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 
     class Meta():
         model = Profile
-        fields = ['gender', 'weight', 'height', 'goals', 'activity','age','lactoseIntolerance','foodChoice']
+        fields = ['gender', 'name','weight', 'height', 'goals', 'activity','age','lactoseIntolerance','foodChoice']
 
 class ProfileReadSerializer(serializers.ModelSerializer):
     username=serializers.SerializerMethodField('get_username')
@@ -73,8 +73,13 @@ class ProfileReadSerializer(serializers.ModelSerializer):
 class DailyDietSserializer(serializers.ModelSerializer):
     class Meta:
         model=DailyDiet
-        fields=['Mark','comment','Item','Amount']
+        fields=['mark','comment','item','amount']
 class MedicalFormSerializer(serializers.ModelSerializer):
     class Meta:
         model=MedicalForm
-        fields=['BloodGroup','Problem','Description']
+        fields=('bloodGroup','problem','description')
+
+class MedicalFormReadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=MedicalForm
+        fields=('bloodGroup','problem','description','profile',)

@@ -40,6 +40,7 @@ Gender_CHOICES = (
 )
 class Profile(models.Model):
     User=models.OneToOneField(User , on_delete=models.CASCADE)
+    name=models.CharField( max_length=255,)
     gender=models.CharField( max_length=1, choices=Gender_CHOICES)
     age=models.PositiveIntegerField()
     weight = models.FloatField(validators=[MinValueValidator(0.9), MaxValueValidator(258)],)
@@ -65,12 +66,13 @@ class Profile(models.Model):
 #         return str(self.comment)
 
 class DailyDiet(models.Model):
-    Mark=models.BooleanField(null=True)
+    mark=models.BooleanField(null=True)
     comment=models.TextField(null=True,blank=True)
-    Item = models.ForeignKey(FoodNutrition, on_delete=models.CASCADE)
+    item = models.ForeignKey(FoodNutrition, on_delete=models.CASCADE)
     id=models.AutoField(primary_key=True,)
-    Profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    Amount=models.DecimalField(decimal_places=1,max_digits=10)
+    Timestamp=models.DateTimeField(auto_now_add=True, blank=True)
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    amount=models.DecimalField(decimal_places=1,max_digits=10)
 
 
 
@@ -80,9 +82,9 @@ class BloodGroup(models.Model):
         return self.name
 
 class MedicalForm(models.Model):
-    Profile = models.OneToOneField(Profile, on_delete=models.CASCADE)
-    BloodGroup=models.ForeignKey(BloodGroup,on_delete=models.CASCADE)
-    Problem=models.ManyToManyField(Problem)
-    Description=models.TextField()
+    profile = models.OneToOneField(Profile, on_delete=models.CASCADE)
+    bloodGroup=models.ForeignKey(BloodGroup,on_delete=models.CASCADE)
+    problem=models.ManyToManyField(Problem)
+    description=models.TextField()
 
     
