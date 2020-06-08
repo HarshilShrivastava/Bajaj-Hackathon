@@ -219,7 +219,7 @@ class MedicalFormAPI(APIView):
             context['data']=data
             context['message']="can't get food items"
             return Response(context)
-        qs=MedicalForm.objects.get(Profile=obj)
+        qs=MedicalForm.objects.filter(Profile=obj)
         serializer=MedicalFormSerializer(qs)
         context['sucess']=True
         context['status']=200
