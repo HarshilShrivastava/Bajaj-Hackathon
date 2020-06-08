@@ -1,5 +1,8 @@
 from info.models import (
-    Profile
+    Profile,
+   DailyDiet,
+   # DailyIntake,
+    MedicalForm
 )
 from rest_framework.authentication import TokenAuthentication
 from django.shortcuts import get_object_or_404
@@ -24,7 +27,9 @@ from django.contrib.auth import authenticate
 from rest_framework.permissions import AllowAny
 from info.api.v0.serializers import(
 ProfileSerializer,
-ProfileReadSerializer
+ProfileReadSerializer,
+DailyDietSserializer,
+MedicalFormSerializer
 )
 
 class profile(APIView):
@@ -175,4 +180,95 @@ class profile(APIView):
         context['data']=data
         return Response(context)
             
-      
+class MedicalFormAPI(APIView):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = (TokenAuthentication,)
+    def post(self, request, *args, **kwargs):
+        context={}
+        data={}
+        serializer = MedicalFormSerializer(data=request.data)
+        if serializer.is_valid():
+            try:
+                obj=get_object_or_404(Profile,User=request.user)
+            except:
+                context['sucess']=False
+                context['status']=400
+                context['data']=data
+                return Response(context)
+            serializer.save(Profile=obj)
+            context['sucess']=True
+            context['status']=200
+            context['message']="sucessfull post"
+            data=serializer.data
+            context['data']=data
+            return Response(context)
+        else:
+            context['sucess']=False
+            context['status']=400
+            context['message']="unsucessfull post"
+            return Response(context)
+    
+    def get(self,request,*args,**kwargs):
+        context={}
+        data={}
+        try:
+            obj=get_object_or_404(Profile,User=request.user)
+        except:
+            context['sucess']=False
+            context['status']=400
+            context['data']=data
+            context['message']="can't get food items"
+            return Response(context)
+        qs=MedicalForm.objects.get(Profile=obj)
+        serializer=MedicalFormSerializer(qs)
+        context['sucess']=True
+        context['status']=200
+        context['message']="sucessfull get"
+        data=serializer.data
+        context['data']=data
+        return Response(context)
+    
+class Dailydiet(APIView):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = (TokenAuthentication,)
+    def post(self, request, *args, **kwargs):
+        context={}
+        data={}
+        serializer = DailyDietSserializer(data=request.data)
+        if serializer.is_valid():
+            try:
+                obj=get_object_or_404(Profile,User=request.user)
+            except:
+                context['sucess']=False
+                context['status']=400
+                context['data']=data
+                return Response(context)
+            serializer.save(Profile=obj)
+            context['sucess']=True
+            context['status']=201
+            context['message']="sucessfully created"
+            data=serializer.data
+            context['data']=data
+            return Response(context)
+    
+    def get(self, request, *args, **kwargs):
+        context={}
+        data={}
+        try:
+            obj=get_object_or_404(Profile,User=request.user)
+        except:
+            context['sucess']=False
+            context['status']=400
+            context['data']=data
+            context['message']="can't get food items"
+            return Response(context)
+        qs=DailyDiet.objects.filter(Profile=obj)
+        serializer=DailyDietSserializer(qs,many=True)
+        context['sucess']=True
+        context['status']=200
+        context['message']="sucessfull get"
+        data=serializer.data
+        context['data']=data
+        return Response(context)
+
+

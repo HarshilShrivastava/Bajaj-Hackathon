@@ -8,7 +8,7 @@ class FoodSerializer(serializers.ModelSerializer):
 
     class Meta():
         model = Food
-        fields = ['name','Calories','Fat','Protein','Carbohydrate','Image']
+        fields = ['name','Calories','Fat','Protein','Carbohydrate','Image','id']
     def get_photo_url():
         request = self.context.get('request')
         photo_url = Food.Image.url

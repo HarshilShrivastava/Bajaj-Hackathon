@@ -1,11 +1,13 @@
 from rest_framework import serializers
-from info.models import Profile
+from info.models import (Profile,
+DailyDiet,
+MedicalForm)
 
 class ProfileSerializer(serializers.ModelSerializer):
 
     class Meta():
         model = Profile
-        fields = ['gender', 'weight', 'height', 'goals', 'activity','age']
+        fields = ['gender', 'weight', 'height', 'goals', 'activity','age','lactoseIntolerance','foodChoice']
 
 class ProfileReadSerializer(serializers.ModelSerializer):
     username=serializers.SerializerMethodField('get_username')
@@ -13,10 +15,11 @@ class ProfileReadSerializer(serializers.ModelSerializer):
     gender=serializers.SerializerMethodField('get_Gender')
     activity=serializers.SerializerMethodField('get_Activity')
     goals=serializers.SerializerMethodField('get_Goals')
+    foodChoice=serializers.SerializerMethodField('get_choice')
 
     class Meta():
         model = Profile
-        fields = ['gender', 'weight', 'height', 'goals', 'activity','age','username','bmi','dailyCalories','bmr','condition']
+        fields = ['gender', 'weight', 'height', 'goals', 'activity','age','username','bmi','dailyCalories','bmr','condition','foodChoice','lactoseIntolerance']
 
     def get_username(self,info):
         data=info.User.username
@@ -63,3 +66,15 @@ class ProfileReadSerializer(serializers.ModelSerializer):
             return "Active"
         if data=='4':
             return "Very Active"
+    def get_choice(sel,info):
+        data=info.foodChoice.name
+        return data
+
+class DailyDietSserializer(serializers.ModelSerializer):
+    class Meta:
+        model=DailyDiet
+        fields=['Mark','comment','Item','Amount']
+class MedicalFormSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=MedicalForm
+        fields=['BloodGroup','Problem','Description']

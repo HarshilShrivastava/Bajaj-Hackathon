@@ -1,6 +1,11 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.core.validators import MaxValueValidator, MinValueValidator
+from food.models import(
+    FoodNutrition,
+    Problem,
+    Category
+)
 
 User = get_user_model()
 
@@ -44,4 +49,40 @@ class Profile(models.Model):
     goals=models.CharField(max_length=1, choices=Goals_Choices)
     activity=models.CharField(max_length=1, choices=Activity_Choices)
     dailyCalories=models.PositiveIntegerField()
+    lactoseIntolerance=models.BooleanField()
+    foodChoice=models.ForeignKey(Category,on_delete=models.CASCADE)
     bmr=models.FloatField(validators=[MinValueValidator(0.9), MaxValueValidator(10000)],)
+
+
+# class DailyIntake(models.Model):
+#     id=models.AutoField(primary_key=True,)
+#     Profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+#     Amount=models.DecimalField(decimal_places=1, null=True, blank=True,max_digits=10)
+#     Item = models.ForeignKey(FoodNutrition, on_delete=models.CASCADE)
+#     Mark=models.BooleanField()
+#     comment=models.TextField()
+#     def __str__(self):
+#         return str(self.comment)
+
+class DailyDiet(models.Model):
+    Mark=models.BooleanField(null=True)
+    comment=models.TextField(null=True,blank=True)
+    Item = models.ForeignKey(FoodNutrition, on_delete=models.CASCADE)
+    id=models.AutoField(primary_key=True,)
+    Profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    Amount=models.DecimalField(decimal_places=1,max_digits=10)
+
+
+
+class BloodGroup(models.Model):
+    name=models.CharField(max_length=10)
+    def __str__(self):
+        return self.name
+
+class MedicalForm(models.Model):
+    Profile = models.OneToOneField(Profile, on_delete=models.CASCADE)
+    BloodGroup=models.ForeignKey(BloodGroup,on_delete=models.CASCADE)
+    Problem=models.ForeignKey(Problem,on_delete=models.CASCADE)
+    Description=models.TextField()
+
+    
