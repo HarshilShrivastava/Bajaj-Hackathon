@@ -250,6 +250,10 @@ class Dailydiet(APIView):
             data=serializer.data
             context['data']=data
             return Response(context)
+        else:
+            context['sucess']=False
+            return Response(context)
+
     
     def get(self, request, *args, **kwargs):
         context={}
