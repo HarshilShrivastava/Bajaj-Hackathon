@@ -40,6 +40,7 @@ class FoodReadSerializer(serializers.ModelSerializer):
     Availablity=AvailablitySerializer(many=True,
         read_only=True
     )
+    Vitamin=serializers.SerializerMethodField('get_Vitamin')
     class Meta():
         model = FoodNutrition
         fields = ['name','description','Food_Group','Unitconversion','Calories','Lactose_Intolerance','Fat','Protein','Carbohydrate','Vitamin','Sugars','Fiber','Cholesterol','Saturated_Fats','Image','Availablity','Problems_Can_Solve','Processing_level','AvailablityTier','Category','Food_Group',]
@@ -53,7 +54,9 @@ class FoodReadSerializer(serializers.ModelSerializer):
         data=info.AvailablityTier.name
         return data
 
-    
+    def get_Vitamin(self,info):
+        data=info.Vitamin.name
+        return data
     def get_Processing_level(self,info):
         data=info.Processing_level.Level
         return data
