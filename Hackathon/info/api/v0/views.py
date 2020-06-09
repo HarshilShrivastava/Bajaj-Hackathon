@@ -4,9 +4,10 @@ from info.models import (
    # DailyIntake,
     MedicalForm
 )
+from datetime import date
+from django.utils import timezone
 from rest_framework.authentication import TokenAuthentication
 from django.shortcuts import get_object_or_404
-
 from django.shortcuts import render
 from django.contrib.auth import get_user_model
 from rest_framework.generics import UpdateAPIView
@@ -266,6 +267,7 @@ class Dailydiet(APIView):
     
     def get(self, request, *args, **kwargs):
         context={}
+        today = date.today()
         data={}
         try:
             obj=get_object_or_404(Profile,User=request.user)
@@ -276,12 +278,20 @@ class Dailydiet(APIView):
             context['message']="can't get food items"
             return Response(context)
         qs=DailyDiet.objects.filter(profile=obj)
+        qq=timezone.now().date()
+        qs=qs.filter(Timestamp__date__lte=timezone.now(),Timestamp__date__gte=qq)
+        calintake=0
+        for item in qs:
+            calintake=calintake+item.item.Calories
         serializer=DailyDietReadSserializer(qs,many=True)
         context['sucess']=True
         context['status']=200
+        caloriesleft=obj.dailyCalories-calintake
+        context['calories took']=calintake
+        context['calories left']=caloriesleft   
         context['message']="sucessfull get"
         data=serializer.data
         context['data']=data
-        return Response(data)
+        return Response(context)
 
 

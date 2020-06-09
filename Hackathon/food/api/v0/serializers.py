@@ -43,7 +43,7 @@ class FoodReadSerializer(serializers.ModelSerializer):
     Vitamin=serializers.SerializerMethodField('get_Vitamin')
     class Meta():
         model = FoodNutrition
-        fields = ['name','description','Food_Group','Unitconversion','Calories','Lactose_Intolerance','Fat','Protein','Carbohydrate','Vitamin','Sugars','Fiber','Cholesterol','Saturated_Fats','Image','Availablity','Problems_Can_Solve','Processing_level','AvailablityTier','Category','Food_Group',]
+        fields = ['name','description','Food_Group','Unitconversion','Calories','Lactose_Intolerance','Fat','Protein','Carbohydrate','Vitamin','Sugars','Fiber','Cholesterol','Saturated_Fats','Image','Availablity','Problems_Can_Solve','Processing_level','AvailablityTier','Category','Food_Group','id']
     def get_food_group(self,info):
         data=info.Food_Group.name
         return data
