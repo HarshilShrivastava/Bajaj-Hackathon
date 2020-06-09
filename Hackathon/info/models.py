@@ -85,6 +85,6 @@ class MedicalForm(models.Model):
     profile = models.OneToOneField(Profile, on_delete=models.CASCADE)
     bloodGroup=models.ForeignKey(BloodGroup,on_delete=models.CASCADE)
     problem=models.ManyToManyField(Problem)
-    description=models.TextField()
+    description=models.TextField(blank=True,null=True)
 
     

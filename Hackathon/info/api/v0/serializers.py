@@ -1,8 +1,14 @@
 from rest_framework import serializers
 from info.models import (Profile,
 DailyDiet,
-MedicalForm)
-
+MedicalForm,
+)
+from food.models import(
+    Problem
+)
+from food.api.v0.serializers import(
+    FoodSerializer
+)
 class ProfileSerializer(serializers.ModelSerializer):
 
     class Meta():
@@ -19,7 +25,7 @@ class ProfileReadSerializer(serializers.ModelSerializer):
 
     class Meta():
         model = Profile
-        fields = ['gender', 'weight', 'height', 'goals', 'activity','age','username','bmi','dailyCalories','bmr','condition','foodChoice','lactoseIntolerance']
+        fields = ['gender', 'name','weight', 'height', 'goals', 'activity','age','username','bmi','dailyCalories','bmr','condition','foodChoice','lactoseIntolerance']
 
     def get_username(self,info):
         data=info.User.username
@@ -74,12 +80,38 @@ class DailyDietSserializer(serializers.ModelSerializer):
     class Meta:
         model=DailyDiet
         fields=['mark','comment','item','amount']
+
+
+
+class DailyDietReadSserializer(serializers.ModelSerializer):
+    item=FoodSerializer(read_only=True)
+    class Meta:
+        model=DailyDiet
+        fields=['mark','comment','amount','Timestamp','id','item']
+    def get_item(self,info):
+        data=info.item.name
+        return data
+ 
+
+
+class ProblemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Problem
+        fields='__all__'
+
 class MedicalFormSerializer(serializers.ModelSerializer):
     class Meta:
         model=MedicalForm
         fields=('bloodGroup','problem','description')
 
-class MedicalFormReadSerializer(serializers.ModelSerializer):
+class MedicalFormReadSerializer(serializers.ModelSerializer):   
+    bloodGroup=serializers.SerializerMethodField('get_bloodGroup')
+    problem=ProblemSerializer(many=True,
+        read_only=True
+    )
     class Meta:
         model=MedicalForm
-        fields=('bloodGroup','problem','description','profile',)
+        fields=('bloodGroup','description','problem')
+    def get_bloodGroup(self,info):
+        data=info.bloodGroup.name
+        return data

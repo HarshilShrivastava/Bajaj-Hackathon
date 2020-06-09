@@ -30,7 +30,8 @@ ProfileSerializer,
 ProfileReadSerializer,
 DailyDietSserializer,
 MedicalFormSerializer,
-MedicalFormReadSerializer
+MedicalFormReadSerializer,
+DailyDietReadSserializer
 )
 
 class profile(APIView):
@@ -241,6 +242,7 @@ class Dailydiet(APIView):
         context={}
         data={}
         serializer = DailyDietSserializer(data=request.data)
+        
         if serializer.is_valid():
             try:
                 obj=get_object_or_404(Profile,User=request.user)
@@ -249,7 +251,7 @@ class Dailydiet(APIView):
                 context['status']=400
                 context['data']=data
                 return Response(context)
-            serializer.save(Profile=obj)
+            serializer.save(profile=obj)
             context['sucess']=True
             context['status']=201
             context['message']="sucessfully created"
@@ -257,6 +259,7 @@ class Dailydiet(APIView):
             context['data']=data
             return Response(context)
         else:
+            print(serializer.errors)
             context['sucess']=False
             return Response(context)
 
@@ -272,8 +275,8 @@ class Dailydiet(APIView):
             context['data']=data
             context['message']="can't get food items"
             return Response(context)
-        qs=DailyDiet.objects.filter(Profile=obj)
-        serializer=DailyDietSserializer(qs,many=True)
+        qs=DailyDiet.objects.filter(profile=obj)
+        serializer=DailyDietReadSserializer(qs,many=True)
         context['sucess']=True
         context['status']=200
         context['message']="sucessfull get"

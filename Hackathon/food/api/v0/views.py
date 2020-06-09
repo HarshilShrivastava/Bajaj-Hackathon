@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from food.models import (
-    Food
+    Food,
+    FoodNutrition,
 )
 from rest_framework import filters
 from rest_framework import status
@@ -16,7 +17,7 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.permissions import IsAuthenticated
-from .serializers import FoodSerializer
+from .serializers import FoodSerializer,FoodReadSerializer
 from rest_framework.views import APIView
 from rest_framework import viewsets
 from rest_framework.permissions import AllowAny
@@ -25,8 +26,8 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework import generics
 
 class AllFoodViews(generics.ListCreateAPIView):
-    queryset=Food.objects.all()
-    serializer_class = FoodSerializer
+    queryset=FoodNutrition.objects.all()
+    serializer_class = FoodReadSerializer
     search_fields = ['name']
     http_method_names = ['get']
 
