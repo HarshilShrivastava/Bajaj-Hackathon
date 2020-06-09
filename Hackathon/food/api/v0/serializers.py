@@ -1,8 +1,11 @@
 from rest_framework import serializers
 from food.models import(
     Food,
-    FoodNutrition
+    FoodNutrition,
+    Problem,
+    AvailablityZone
 )
+
 class FoodSerializer(serializers.ModelSerializer):
     #photo_url = serializers.ImageField(max_length=None, use_url=True, allow_null=True, required=False)
 
@@ -15,33 +18,42 @@ class FoodSerializer(serializers.ModelSerializer):
         photo_url = Food.Image.url
         return request.build_absolute_uri(photo_url)
         
+class ProblemSerializer(serializers.ModelSerializer):
+    class Meta():
+        model=Problem
+        fields= ['name']
 
+class AvailablitySerializer(serializers.ModelSerializer):
+    class Meta():
+        model=AvailablityZone
+        fields= ['name']
 
 
 class FoodReadSerializer(serializers.ModelSerializer):
-
-
+    Food_Group=serializers.SerializerMethodField('get_food_group')
+    Category=serializers.SerializerMethodField('get_category')
+    AvailablityTier=serializers.SerializerMethodField('get_availablity')
+    Processing_level=serializers.SerializerMethodField('get_Processing_level')
+    Problems_Can_Solve=ProblemSerializer(many=True,
+        read_only=True
+    )
+    Availablity=AvailablitySerializer(many=True,
+        read_only=True
+    )
     class Meta():
         model = FoodNutrition
-        fields = '__all__'
+        fields = ['name','description','Food_Group','Unitconversion','Calories','Lactose_Intolerance','Fat','Protein','Carbohydrate','Vitamin','Sugars','Fiber','Cholesterol','Saturated_Fats','Image','Availablity','Problems_Can_Solve','Processing_level','AvailablityTier','Category','Food_Group',]
+    def get_food_group(self,info):
+        data=info.Food_Group.name
+        return data
+    def get_category(self,info):
+        data=info.Category.name
+        return data
+    def get_availablity(self,info):
+        data=info.AvailablityTier.name
+        return data
 
-
-# name=models.CharField(max_length=255)
-#     description=models.TextField()
-#     Food_Group = models.ForeignKey(FoodGroup, on_delete=models.CASCADE)
-#     Category = models.ForeignKey(Category, on_delete=models.CASCADE)
-#     AvailablityTier = models.ForeignKey(AvailablityLevel, on_delete=models.CASCADE)
-#     Processing_level=models.ForeignKey(Processing,on_delete=models.CASCADE)
-#     Unitconversion=models.DecimalField(decimal_places=2, null=True, blank=True,max_digits=4)
-#     Calories=models.PositiveIntegerField(null=True)
-#     Lactose_Intolerance=models.BooleanField(default=False)
-#     Fat=models.DecimalField(decimal_places=2, null=True, blank=True,max_digits=10)
-#     Protein =models.DecimalField(decimal_places=2, null=True, blank=True,max_digits=10)
-#     Carbohydrate =models.DecimalField(decimal_places=2, null=True, blank=True,max_digits=10)
-#     Vitamin=models.ForeignKey(Vitamins,on_delete= models.CASCADE)
-#     Sugars =models.DecimalField(decimal_places=2, null=True, blank=True,max_digits=10)
-#     Fiber =models.DecimalField(decimal_places=2, null=True, blank=True,max_digits=10)
-#     Cholesterol =models.DecimalField(decimal_places=2, null=True, blank=True,max_digits=10)
-#     Saturated_Fats =models.DecimalField(decimal_places=2, null=True, blank=True,max_digits=10)
-#     Image=models.ImageField(upload_to='Food/',null=True,blank=True)
-#     Problems_Can_Solve=models.ManyToManyField(Problem)
+    
+    def get_Processing_level(self,info):
+        data=info.Processing_level.Level
+        return data

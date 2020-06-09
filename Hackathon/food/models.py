@@ -72,9 +72,10 @@ class FoodNutrition(models.Model):
     Fiber =models.DecimalField(decimal_places=2, null=True, blank=True,max_digits=10)
     Cholesterol =models.DecimalField(decimal_places=2, null=True, blank=True,max_digits=10)
     Saturated_Fats =models.DecimalField(decimal_places=2, null=True, blank=True,max_digits=10)
-    Image=models.ImageField(upload_to='Food/',null=True,blank=True)
+    Image=models.ImageField(upload_to='Foodx/',null=True,blank=True)
     Problems_Can_Solve=models.ManyToManyField(Problem)
-
     Availablity=models.ManyToManyField(AvailablityZone)
+
+    
     def __str__(self):
         return self.name

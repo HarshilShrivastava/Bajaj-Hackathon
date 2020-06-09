@@ -282,6 +282,6 @@ class Dailydiet(APIView):
         context['message']="sucessfull get"
         data=serializer.data
         context['data']=data
-        return Response(context)
+        return Response(data)
 
 
