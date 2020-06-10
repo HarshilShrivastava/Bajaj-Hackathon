@@ -84,14 +84,21 @@ class DailyDietSserializer(serializers.ModelSerializer):
 
 
 class DailyDietReadSserializer(serializers.ModelSerializer):
-    item=FoodSerializer(read_only=True)
+    itemname=serializers.SerializerMethodField('get_item')
+    calories=serializers.SerializerMethodField('get_calories')
+    image=serializers.SerializerMethodField('get_image')
     class Meta:
         model=DailyDiet
-        fields=['mark','comment','amount','Timestamp','id','item']
+        fields=['mark','comment','amount','id','itemname','image','calories']
     def get_item(self,info):
         data=info.item.name
         return data
- 
+    def get_calories(self,info):
+        data=info.item.Calories
+        return data
+    def get_image(self,info):
+        data=info.item.Image
+    
 
 
 class ProblemSerializer(serializers.ModelSerializer):

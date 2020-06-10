@@ -44,13 +44,22 @@ class AllFoodViews(generics.ListCreateAPIView):
 
 
 @api_view(['GET',])
-@permission_classes((AllowAny,))
+@permission_classes((IsAuthenticated,))
 def get_food(request):
     context={}
     data={}
     context['sucess']=True
     context['status']=200
     context['response']="sucessfull"
+    try:
+            obj=get_object_or_404(Profile,User=request.user)
+    except:
+        context['sucess']=False
+        context['status']=400
+        context['data']=data
+        context['message']="can't get food items"
+        return Response(context)
+    
     qs=Food.objects.filter(name="Bread Chapati Or Roti Whole Wheat Commercially Prepared Frozen")
     qs=qs| Food.objects.filter(name="poha")
     qs=qs| Food.objects.filter(name="Apples")
