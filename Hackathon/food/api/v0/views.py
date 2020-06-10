@@ -65,6 +65,7 @@ def get_food(request):
         context['data']=data
         context['message']="profile dosen't exist"
         return Response(context)
+    
     qs=FoodNutrition.objects.filter(name="Bell Peppers")
     # qs=qs| Food.objects.filter(name="poha")
     # qs=qs| Food.objects.filter(name="Apples")
@@ -78,5 +79,5 @@ def get_food(request):
     serializer_class = FoodSerializer(qs,many=True,context={'request': request})
     data=serializer_class.data
     context['data']=data
-    return Response(context)
+    return Response(data)
 
