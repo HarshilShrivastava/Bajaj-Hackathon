@@ -13,8 +13,14 @@ from rest_framework.decorators import (
     api_view,
     permission_classes,
 )
+from info.models import(
+    Profile
+)
+from info.api.v0.serializers import(
+    DailyDietReadSserializer
+
+)
 from django.views.decorators.csrf import csrf_exempt
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.permissions import IsAuthenticated
 from .serializers import FoodSerializer,FoodReadSerializer
@@ -43,8 +49,8 @@ class AllFoodViews(generics.ListCreateAPIView):
 
 
 
-@api_view(['GET',])
-@permission_classes((IsAuthenticated,))
+@api_view(['GET', ])
+@permission_classes((IsAuthenticated, ))
 def get_food(request):
     context={}
     data={}
@@ -57,26 +63,20 @@ def get_food(request):
         context['sucess']=False
         context['status']=400
         context['data']=data
-        context['message']="can't get food items"
+        context['message']="profile dosen't exist"
         return Response(context)
-    
-    qs=Food.objects.filter(name="Bread Chapati Or Roti Whole Wheat Commercially Prepared Frozen")
-    qs=qs| Food.objects.filter(name="poha")
-    qs=qs| Food.objects.filter(name="Apples")
-    qs=qs| Food.objects.filter(name="Chicken Boiled")
-    qs=qs| Food.objects.filter(name="Sushi Topped With Salmon")
-    qs=qs| Food.objects.filter(name="Brown Rice")
-    qs=qs| Food.objects.filter(name="Pie Tofu With Fruit")
-    qs=qs| Food.objects.filter(name="Hard Boiled Eggs")
-    qs=qs| Food.objects.filter(name="Mushrooms")
-
-
-    #Hard Boiled Eggs
-
-    #Chicken Feet Boiled
+    qs=FoodNutrition.objects.filter(name="Bell Peppers")
+    # qs=qs| Food.objects.filter(name="poha")
+    # qs=qs| Food.objects.filter(name="Apples")
+    # qs=qs| Food.objects.filter(name="Chicken Boiled")
+    # qs=qs| Food.objects.filter(name="Sushi Topped With Salmon")
+    # qs=qs| Food.objects.filter(name="Brown Rice")
+    # qs=qs| Food.objects.filter(name="Pie Tofu With Fruit")
+    # qs=qs| Food.objects.filter(name="Hard Boiled Eggs")
+    # qs=qs| Food.objects.filter(name="Mushrooms")
     context['count']=qs.count()
     serializer_class = FoodSerializer(qs,many=True,context={'request': request})
     data=serializer_class.data
     context['data']=data
-    return Response(data)
+    return Response(context)
 
